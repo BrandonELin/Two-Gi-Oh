@@ -1,8 +1,13 @@
 # Two-Gi-Oh
 This is Two-Gi-Oh, a simplified version of the popular card game Yu-Gi-Oh.
+
+# Play here
+https://brandonelin.github.io/Two-Gi-Oh/
+
 The game is played between you and a friend.
 ## How to play
 The game is split up into 2 phases per turn.
+
 
 In the Main phase, players can place monsters and set spells and trap.
 Note that only 1 monster can be summoned in a given turn but any number of spells and traps can be played given enough space.
