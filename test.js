@@ -1,15 +1,3 @@
-//opening hand
-for(let i=0; i<5; i++){
-    drawCard()
-}
-
-//sets cards
-addCards()
-
-setHand()
-
-ePhase.addEventListener("click", endPhase);
-
 //draws cards by counting down from the top of the array
 function drawCard(){
     for(let i = 0; i<player1Hand.length; i++){
@@ -21,6 +9,7 @@ function drawCard(){
     }
 }
 
+//places cards from hand array to dom
 function addCards(){
     for(let i = 0; i<player1Hand.length; i++){
         if(player1Hand[i]!="0"){
@@ -30,90 +19,98 @@ function addCards(){
     }
 }
 
-function battlePhase2(){
+//creates battle phase and end turn listeners
+let bPhase = document.querySelector("#b")
+let ePhase = document.querySelector("#e")
+
+ePhase.addEventListener("click", endPhase);
+
+function battlePhase(){
     alert("it's battle time")
     //disables main phase listeners
     for(let i of cards){
         if(!i.classList.contains("empty")){
             let newImage = i.querySelector("img")
             if(newImage.classList[2]=="m"){
-                newImage.removeEventListener("click", summonMonster2)
+                newImage.removeEventListener("click", summonMonster)
             }
             if(newImage.classList[2]=="s"){
-                newImage.removeEventListener("click", activateSpell2)
+                newImage.removeEventListener("click", activateSpell)
             }
             if(newImage.classList[2]=="t"){
-                newImage.removeEventListener("click", setTrap2)
+                newImage.removeEventListener("click", setTrap)
             }
         }
     }
     //allows monsters to attack if in ATK position
-    for(let i of rightMZActive){
+    for(let i of leftMZActive){
         if(i.querySelector("img").classList.contains("ATK")){
-            i.addEventListener('click',declareAttack2)
+            i.addEventListener('click',declareAttack)
         } 
     }
     //removes battle phase listener
-    bPhase.removeEventListener("click", battlePhase2)
+    bPhase.removeEventListener("click", battlePhase)
     phase = "battle"
 }
 
 
 
 //listener ends the turn
-function endPhase2(){
-    ePhase.removeEventListener("click", endPhase2);
+function endPhase(){
+    ePhase.removeEventListener("click", endPhase);
     //disables main phase listeners
     if(phase=="main"){
         for(let i of cards){
             if(!i.classList.contains("empty")){
                 let newImage = i.querySelector("img")
                 if(newImage.classList[2]=="m"){
-                    newImage.removeEventListener("click", summonMonster2)
+                    newImage.removeEventListener("click", summonMonster)
                 }
                 if(newImage.classList[2]=="s"){
-                    newImage.removeEventListener("click", activateSpell2)
+                    newImage.removeEventListener("click", activateSpell)
                 }
                 if(newImage.classList[2]=="t"){
-                    newImage.removeEventListener("click", setTrap2)
+                    newImage.removeEventListener("click", setTrap)
                 }
             }
         }
-        bPhase.removeEventListener("click", battlePhase2)
+        bPhase.removeEventListener("click", battlePhase)
     } else {
         //disables battlephase listeners
         for(let i of leftMZActive){
             if(i.querySelector("img").classList.contains("ATK")){
-                i.removeEventListener('click',declareAttack2)
+                i.removeEventListener('click',declareAttack)
             }
         } 
     }
     //starts next players turn
     phase="main"
-    alert("Player 1, it's your turn")
+    alert("Player 2, it's your turn")
     clearHand()
-    drawCard()
-    addCards()
-    setHand()
-    bPhase.addEventListener("click", battlePhase);
-    ePhase.addEventListener("click", endPhase);
+    drawCard2()
+    addCards2()
+    setHand2()
+    changablePosition2()
+    bPhase.addEventListener("click", battlePhase2);
+    ePhase.addEventListener("click", endPhase2);
+    console.log(player1Hand, player2Hand)
 }
 
 //listener for summoning monsters
-function summonMonster2(monster){
+function summonMonster(monster){
     //saves monster name for global
     monsterName=monster.target
     //empties card space
     monster.target.parentElement.classList.add("empty")
-    player2Hand[monsterName.classList[3]] = "0"
+    player1Hand[monsterName.classList[3]] = "0"
     //globalizes stats
     monsterStats = monsterSeperator()
     //checks if monster need to be tribute summoned
     if(monsterStats[3]>1){
         //tribute summoned monsters replace old monsters so they become listeners
-        if(rightMZActive.length>0 && confirm("Tribute Summon?")){
-            for(let j of rightMZActive){
-                j.addEventListener("click", tributeMonster2)
+        if(leftMZActive.length>0 && confirm("Tribute Summon?")){
+            for(let j of leftMZActive){
+                j.addEventListener("click", tributeMonster)
             }
         } else {
             //cancels summon if player doesn't want to tribute summon
@@ -121,19 +118,19 @@ function summonMonster2(monster){
         }
     }else{
         //makes every space a place where monsters can be summoned
-        for(let j of rightMZEmpty){
-            j.addEventListener("click", placeMonster2)
+        for(let j of leftMZEmpty){
+            j.addEventListener("click", placeMonster)
         }
     }
     
     //players can only summon once per turn so this makes sure of that
     for(let i of cards){
-        i.querySelector("img").removeEventListener("click", summonMonster2)
+        i.querySelector("img").removeEventListener("click", summonMonster)
     }
 }
 
 //checks stats
-function monsterSeperator2(){
+function monsterSeperator(){
     for(let i of monsterList){
         if(monsterName.classList[1]==i[0]){
             return i;
@@ -142,71 +139,71 @@ function monsterSeperator2(){
 }
 
 //places monster on the field
-function placeMonster2(evt){
+function placeMonster(evt){
     //makes space active
     evt.target.classList.remove("empty")
     evt.target.classList.add("active")
     //assigns stats to field stats
     if(evt.target.classList[1]=="1"){
-        rightMonsters[0][0]=monsterStats[0];
-        rightMonsters[0][1]=monsterStats[1];
-        rightMonsters[0][2]=monsterStats[2];
+        leftMonsters[0][0]=monsterStats[0];
+        leftMonsters[0][1]=monsterStats[1];
+        leftMonsters[0][2]=monsterStats[2];
     } else if(evt.target.classList[1]=="2"){
-        rightMonsters[1][0]=monsterStats[0];
-        rightMonsters[1][1]=monsterStats[1];
-        rightMonsters[1][2]=monsterStats[2];
+        leftMonsters[1][0]=monsterStats[0];
+        leftMonsters[1][1]=monsterStats[1];
+        leftMonsters[1][2]=monsterStats[2];
     } else if(evt.target.classList[1]=="3"){
-        rightMonsters[2][0]=monsterStats[0];
-        rightMonsters[2][1]=monsterStats[1];
-        rightMonsters[2][2]=monsterStats[2];
+        leftMonsters[2][0]=monsterStats[0];
+        leftMonsters[2][1]=monsterStats[1];
+        leftMonsters[2][2]=monsterStats[2];
     }
     //sets monster to attack or defense position
     if(confirm("ATK(OK) or DEF(Cancel)?")){
-        evt.target.innerHTML = `<img class="fit ${monsterName.classList[1]} ATK" src="images/right/${monsterName.classList[1]}.png"><p class = "stats">${monsterStats[1]}</p>`
+        evt.target.innerHTML = `<img class="fit ${monsterName.classList[1]} ATK" src="images/left/${monsterName.classList[1]}.png"><p class = "stats">${monsterStats[1]}</p>`
     } else {
         evt.target.innerHTML = `<img class="fit ${monsterName.classList[1]} DEF" src="images/${monsterName.classList[1]}.png"><p class = "stats">${monsterStats[2]}</p>`
     }
     //removes card from hand
     monsterName.remove()
     //prevents monster from being summoned more than it should
-    for(let i of newRMZ){
-        i.removeEventListener("click", placeMonster2)
+    for(let i of newLMZ){
+        i.removeEventListener("click", placeMonster)
     }
 }
 
-function tributeMonster2(evt){
+function tributeMonster(evt){
     //replaces old monster with new monster
     let tribute = evt.target.parentElement
     if(tribute.classList[1]=="1"){
-        rightMonsters[0]=monsterStats
+        leftMonsters[0]=monsterStats
     } else if(tribute.classList[1]=="2"){
-        rightMonsters[1]=monsterStats
+        leftMonsters[1]=monsterStats
     } else if(tribute.classList[1]=="3"){
-        rightMonsters[2]=monsterStats
+        leftMonsters[2]=monsterStats
     }
     //asks for position
     if(confirm("ATK(OK) or DEF(Cancel)?")){
-        tribute.innerHTML = `<img class="fit ${monsterName.classList[1]} ATK" src="images/right/${monsterName.classList[1]}.png"><p class = "stats">${monsterStats[1]}</p>`
+        tribute.innerHTML = `<img class="fit ${monsterName.classList[1]} ATK" src="images/left/${monsterName.classList[1]}.png"><p class = "stats">${monsterStats[1]}</p>`
     } else {
         tribute.innerHTML = `<img class="fit ${monsterName.classList[1]} DEF" src="images/${monsterName.classList[1]}.png"><p class = "stats">${monsterStats[2]}</p>`
     }
     //remove from hand
     monsterName.remove()
     //prevents monster from being summoned more than it should
-    for(let i of newRMZ){
-        i.removeEventListener("click", tributeMonster2)
+    for(let i of newLMZ){
+        i.removeEventListener("click", tributeMonster)
     }
 }
 
 //makes it so that monster position can be changed
-function changablePosition2(){
-    for(let i of rightMZActive){
+function changablePosition(){
+    for(let i of leftMZActive){
         console.log(i)
-        i.querySelector('p').addEventListener('click',changePosition2)
+        i.querySelector('p').addEventListener('click',changePosition)
     }
 }
 //changes monster position
-function changePosition2(evt){
+function changePosition(evt){
     monsterName = evt.target.parentElement.querySelector('img')
     let monsterNumber = evt.target.parentElement.classList[1]-1
     //makes sure
@@ -222,7 +219,7 @@ function changePosition2(evt){
 }
 
 //places the cards from hand to spell and trap zone
-function activateSpell2(spell){
+function activateSpell(spell){
     //globalizes target
     spellName=spell.target
     //checks the seperator to see if the spell can be activated
@@ -232,33 +229,33 @@ function activateSpell2(spell){
         player1Hand[spellName.classList[3]] = "0"
         //ads listener to open spell and trap zones
         for(let j of leftSTZEmpty){
-            j.addEventListener("click", placeSpell2)
+            j.addEventListener("click", placeSpell)
         }
     }
 }
 
 //places spell in spell or trap zone
-function placeSpell2(evt){
+function placeSpell(evt){
     spellSound.play()
     //posts image
-    evt.target.innerHTML = `<img class="fit ${spellName.classList[1]}" src="images/right/${spellName.classList[1]}.png">`;
+    evt.target.innerHTML = `<img class="fit ${spellName.classList[1]}" src="images/left/${spellName.classList[1]}.png">`;
     //checks seperator to apply listeners
     spellSeperator2();
     //globalizes target
     temp = evt.target;
     //removes listener
     for(let i of newLSTZ){
-        i.removeEventListener("click", placeSpell2)
+        i.removeEventListener("click", placeSpell)
     }
 }
 
 //readies trap from hand
-function setTrap2(trap){
+function setTrap(trap){
     //globalizes target
     trapName=trap.target
     //empties space
     trap.target.parentElement.classList.add("empty")
-    player2Hand[trapName.classList[3]] = "0"
+    player1Hand[trapName.classList[3]] = "0"
     //adds listener to potential locations
     for(let j of leftSTZEmpty){
         j.addEventListener("click", placeTrap)
@@ -266,39 +263,40 @@ function setTrap2(trap){
 }
 
 //places trap in spell and trap zones
-function placeTrap2(evt){
+function placeTrap(evt){
     trapSound.play()
     //places card back to hide trap
-    evt.target.innerHTML = `<img class="fit ${trapName.classList[1]}" src="images/right/cardback.png">`;
+    evt.target.innerHTML = `<img class="fit ${trapName.classList[1]}" src="images/left/cardback.png">`;
     //makes space active
     evt.target.classList.remove("empty")
     evt.target.classList.add("active")
     //checks what trap it is
     if(trapName.classList[1]=="magicCylinder"){
-        magicCylinder2++
+        magicCylinder1++
     }
     if(trapName.classList[1]=="negateAttack"){
-        negateAttack2++
+        negateAttack1++
     }
     //remove listeners to prevent adding more traps
-    for(let i of newRSTZ){
-        i.removeEventListener("click", placeTrap2)
+    for(let i of newLSTZ){
+        i.removeEventListener("click", placeTrap)
     }
     trapName.remove()
 }
 
 //attack listener to your monsters
-function declareAttack2(evt){
+function declareAttack(evt){
+    console.log(negateAttack1, negateAttack2, magicCylinder1, magicCylinder2)
     //globalizes target
     monsterName = evt.target
     //saves attack value
     attackingValue = evt.target.parentElement.querySelector("p").innerText
     //monsters can only attack once
-    evt.target.parentElement.removeEventListener('click',declareAttack2)
+    evt.target.parentElement.removeEventListener('click',declareAttack)
     //check if your opponent has a trap
     let trapActivation = confirm("Does your opponent have a response?")
     if(trapActivation){
-        if(negateAttack1+magicCylinder1>0){
+        if(negateAttack2+magicCylinder2>0){
             trapSeperator();
             return 
         }else{
@@ -309,24 +307,29 @@ function declareAttack2(evt){
     }
     attackSound.play()
     //check if opponent has monsters on the field
-    if(leftMZActive.length==0){
+    if(rightMZActive.length==0){
         alert("you attack directly")
-        document.querySelector(".p1").innerText-=attackingValue
+        document.querySelector(".p2").innerText-=attackingValue
         //checks if you won
-        if (document.querySelector(".p1").innerText<0){
-            player2Wins()
+        if (document.querySelector(".p2").innerText<0){
+            player1Wins()
         }
         return;
     }
     //adds listener to opponent's monsters
-    for(let i of leftMZActive){
-        i.addEventListener("click", attackResolution2)
+    for(let i of rightMZActive){
+        i.querySelector("img").addEventListener("click", attackResolution)
     }
 }
 
 
 //listener for attack target
-function attackResolution2(evt){
+function attackResolution(evt){
+    //removes listener from targets
+    for(let i of rightMZActive){
+        i.querySelector("img").removeEventListener("click", attackResolution)
+    }
+    console.log('hi')
     let holder = evt.target.parentElement
     let damage = attackingValue-holder.querySelector("p").innerText
     //check if attack will destroy monster
@@ -334,9 +337,9 @@ function attackResolution2(evt){
         //damage is dealt if it's in attack position
         if(evt.target.classList.contains("ATK")){
             alert(`Player 2 takes ${damage} points of damage`)
-            document.querySelector(".p1").innerText-=damage;
+            document.querySelector(".p2").innerText-=damage;
             //check if player wins
-            if (document.querySelector(".p1").innerText<0){
+            if (document.querySelector(".p2").innerText<0){
                 player1Wins()
             }
         } else {
@@ -350,39 +353,37 @@ function attackResolution2(evt){
     } else {
         //removes your monster if your monster is weaker
         alert('Your monster is destroyed')
-        monsterName.parentElement.innerHTML = "";
         monsterName.parentElement.classList.remove("active")
         monsterName.parentElement.classList.add("empty")
+        monsterName.parentElement.innerHTML = "";
+        
     }
-    //removes listener from targets
-    for(let i of leftMZActive){
-        i.removeEventListener("click", attackResolution2)
-    }
+    
 }
 
 //player 1 wins
-function player2Wins(){
-    for(let i of rightMZActive){
+function player1Wins(){
+    for(let i of leftMZActive){
         if(i.querySelector("img").classList.contains("ATK")){
-            i.removeEventListener('click',declareAttack2)
+            i.removeEventListener('click',declareAttack)
         }
     }
-    ePhase.removeEventListener("click", endPhase2);
-    alert("Congratulations Player 2")
+    ePhase.removeEventListener("click", endPhase);
+    alert("Congratulations Player 1")
 }
 
 //checks is spells can be activated
-function spellSeperator1right(spellTitle){
+function spellSeperator1(spellTitle){
     let sCardName = spellTitle.classList[1]
     //checks if enemy has traps
     if(sCardName==="MST"){
-        if(leftSTZEmpty.length<3){
+        if(rightSTZEmpty.length<3){
             return true;
         }
     }
     //checks if enemy has attack position monsters
     if(sCardName==="Fissure"){
-        for(let i of leftMZActive){
+        for(let i of rightMZActive){
             if(i.querySelector('img').classList[2]=="ATK"){
                 return true;
             }
@@ -390,7 +391,7 @@ function spellSeperator1right(spellTitle){
     }
     //checks if enemy has defense position monsters
     if(sCardName==="shieldCrush"){
-        for(let i of leftMZActive){
+        for(let i of rightMZActive){
             if(i.querySelector('img').classList[2]=="DEF"){
                 return true;
             }
@@ -398,7 +399,7 @@ function spellSeperator1right(spellTitle){
     }
     //checks if you have a monster
     if(sCardName==="egoBoost"){
-        if(rightMZEmpty.length<3){
+        if(leftMZEmpty.length<3){
             return true;
         }
     }
@@ -406,30 +407,30 @@ function spellSeperator1right(spellTitle){
 }
 
 //adds listeners for targets
-function spellSeperator2right(){
+function spellSeperator2(){
     let newSCardName = spellName.classList[1]
     if(newSCardName==="MST"){
-        if(leftSTZEmpty.length<3){
+        if(rightSTZEmpty.length<3){
             MST();
         }
     }
     if(newSCardName==="Fissure"){
-        for(let i of leftMZActive){
+        for(let i of rightMZActive){
             if(i.querySelector('img').classList[2]=="ATK"){
-                i.querySelector('img').addEventListener("click",destroyMonster2);
+                i.querySelector('img').addEventListener("click",destroyMonster);
             }
         }
             
     }
     if(newSCardName==="shieldCrush"){
-        for(let i of leftMZActive){
+        for(let i of rightMZActive){
             if(i.querySelector('img').classList[2]=="DEF"){
-                i.querySelector('img').addEventListener("click",destroyMonster2);
+                i.querySelector('img').addEventListener("click",destroyMonster);
             }
         }
     }
     if(newSCardName==="egoBoost"){
-        if(rightMZEmpty.length<3){
+        if(leftMZEmpty.length<3){
             egoBoost();
         }
         
@@ -437,14 +438,14 @@ function spellSeperator2right(){
 }
 
 //adds listeners to traps
-function MST2(){
-    for(let i of leftSTZActive){
-        i.querySelector("img").addEventListener("click", MSTright)
+function MST(){
+    for(let i of rightSTZActive){
+        i.querySelector("img").addEventListener("click", MSTleft)
     } 
 }
 
 //listener for MST targets
-function MSTright(evt){
+function MSTleft(evt){
     //empties space
     evt.target.parentElement.classList.remove("active")
     evt.target.parentElement.classList.add("empty")
@@ -453,13 +454,13 @@ function MSTright(evt){
     spellName.remove();
     temp.querySelector("img").remove()
     //removes listeners from targets
-    for(let i of leftSTZActive){
-        i.querySelector("img").removeEventListener("click", MSTright)
+    for(let i of rightSTZActive){
+        i.querySelector("img").removeEventListener("click", MSTleft)
     } 
 }
 
 //listener for fissure and shield crush
-function destroyMonster2(evt){
+function destroyMonster(evt){
     //empties space
     evt.target.parentElement.classList.remove("active")
     evt.target.parentElement.classList.add("empty")
@@ -468,46 +469,48 @@ function destroyMonster2(evt){
     spellName.remove();
     temp.querySelector("img").remove()
     //removes listeners from targets
-    for(let i of leftMZActive){
-        i.querySelector("img").removeEventListener("click", destroyMonster2)
+    for(let i of rightMZActive){
+        i.querySelector("img").removeEventListener("click", destroyMonster)
     }
 }
 
 //adds listeners to applicable targets
-function egoBoost2(title){
-    for(let i of rightMZActive){
+function egoBoost(title){
+    for(let i of leftMZActive){
         console.log(monsterList)
-        i.querySelector("img").addEventListener("click",egoBoostBoost2)
+        i.querySelector("img").addEventListener("click",egoBoostBoost)
     } 
 }
 
 //listener for egoBoost target
-function egoBoostBoost2(evt){
+function egoBoostBoost(evt){
     //remove original
     spellName.remove();
     temp.querySelector("img").remove()
     //removes listeners
-    for(let i of rightMZActive){
-        i.querySelector("img").removeEventListener("click",egoBoostBoost2)
+    for(let i of leftMZActive){
+        i.querySelector("img").removeEventListener("click",egoBoostBoost)
     }
     //increases attack in both dom and array
     evt.target.parentElement.querySelector("p").innerText=(evt.target.parentElement.querySelector("p").innerText *1) + 500;
-    rightMonsters[evt.target.parentElement.classList[1]-1][1] += 500
+    leftMonsters[evt.target.parentElement.classList[1]-1][1] += 500
+    console.log(monsterList)
 }
 
 //checks traps for activation
-function trapSeperator2(){
+function trapSeperator(){
     //asks what trap to activate
     let trapDivider = confirm("Negate Attack(OK) or Magic Cylinder(Cancel)?")
     //checks if you can/want to activate negate attack
-    if((negateAttack1>0&&magicCylinder1>0&&trapDivider)||(negateAttack1>0&&magicCylinder1<=0)){
+    if((negateAttack2>0&&magicCylinder2>0&&trapDivider)||(negateAttack2>0&&magicCylinder2<=0)){
         //looks for the trap to reveal
-        for(let i of leftSTZActive){
+        for(let i of rightSTZActive){
             if(i.querySelector("img").classList.contains("negateAttack")){
-                i.innerHTML=`<img class="fit negateAttack" src="images/left/negateAttack.png">`
+                i.innerHTML=`<img class="fit negateAttack" src="images/right/negateAttack.png">`
                 setTimeout(() => {
-                    document.querySelector(".p2").innerText-=attackingValue;
+                    endPhase();
                   }, 3000)
+                negateAttack2--
                 //empties space
                 i.classList.remove('active')
                 i.classList.add('empty')
@@ -516,15 +519,19 @@ function trapSeperator2(){
         }
     } else {
         //look for the magicCylinder to activate
-        for(let i of leftSTZActive){
+        for(let i of rightSTZActive){
             if(i.querySelector("img").classList.contains("magicCylinder")){
-                i.innerHTML=`<img class="fit magicCylinder" src="images/left/magicCylinder.png">`
+                i.innerHTML=`<img class="fit magicCylinder" src="images/right/magicCylinder.png">`
                 setTimeout(() => {
-                    endPhase();
+                    document.querySelector(".p1").innerText-=attackingValue;
                   }, 3000)
+                if (document.querySelector(".p1").innerText<0){
+                    player1Wins()
+                }
                 i.classList.remove('active')
                 i.classList.add('empty')
                 i.innerHTML= ""
+                magicCylinder2--
             }
         }
     }

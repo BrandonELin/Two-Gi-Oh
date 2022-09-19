@@ -902,7 +902,7 @@ function changePosition2(evt){
     }
     //swaps position and stats
     if(monsterName.classList[2]=="DEF"){
-        evt.target.parentElement.innerHTML = `<img class="fit ${monsterName.classList[1]} ATK" src="images/left/${monsterName.classList[1]}.png"><p class = "stats">${leftMonsters[monsterNumber][1]}</p>`
+        evt.target.parentElement.innerHTML = `<img class="fit ${monsterName.classList[1]} ATK" src="images/right/${monsterName.classList[1]}.png"><p class = "stats">${leftMonsters[monsterNumber][1]}</p>`
     } else {
         evt.target.parentElement.innerHTML = `<img class="fit ${monsterName.classList[1]} DEF" src="images/${monsterName.classList[1]}.png"><p class = "stats">${leftMonsters[monsterNumber][2]}</p>`
     }
@@ -1051,7 +1051,7 @@ function attackResolution2(evt){
     
 }
 
-//player 1 wins
+//player 2 wins
 function player2Wins(){
     for(let i of rightMZActive){
         if(i.querySelector("img").classList.contains("ATK")){
