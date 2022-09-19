@@ -9,24 +9,27 @@
     <title>Two-Gi-Oh</title>
 </head>
 <body>
-    <div id="space"></div>
+    <audio controls autoplay>
+        <source src="music/Song.mp3" type="audio/mp3">
+
+    </audio>
+    <h1 id="space">Player1</h1>
     <div id="field">
         <div id="left">
             <div class="left-stzones zones">
-                <div class="left-st-zone1 lsz field-card card"></div>
-                <div class="left-st-zone2 lsz field-card card"></div>
-                <div class="left-st-zone3 lsz field-card card"></div>
+                <div class="left-st-zone1 1 lsz field-card card empty"></div>
+                <div class="left-st-zone2 2 lsz field-card card empty"></div>
+                <div class="left-st-zone3 3 lsz field-card card empty"></div>
             </div>
             <div class="left-mzones zones">
-                <div class="left-m-zone1 mz field-card card"></div>
-                <div class="left-m-zone2 mz field-card card"></div>
-                <div class="left-m-zone3 mz field-card card"></div>
+                <div class="left-m-zone1 1 mz field-card card empty"></div>
+                <div class="left-m-zone2 2 mz field-card card empty"></div>
+                <div class="left-m-zone3 3 mz field-card card empty"></div>
             </div>
         </div>
         <div class="center zones">
             <div class="p1 lp">4000</div>
             <div class="phases">
-                <a id="d" class="phase">D</a>
                 <a id="m" class="phase">M</a>
                 <a id="b" class="phase">B</a>
                 <a id="e" class="phase">E</a>
@@ -35,28 +38,29 @@
         </div>
         <div id="right">
             <div class="right-mzones zones">
-                <div class="right-m-zone1 mz field-card card"></div>
-                <div class="right-m-zone1 mz field-card card"></div>
-                <div class="right-m-zone1 mz field-card card"></div>
+                <div class="right-m-zone1 1 mz field-card card empty"></div>
+                <div class="right-m-zone2 2 mz field-card card empty"></div>
+                <div class="right-m-zone3 3 mz field-card card empty"></div>
             </div>
             <div class="right-stzones zones">
-                <div class="right-st-zone1 rsz field-card card"></div>
-                <div class="right-st-zone2 rsz field-card card"></div>
-                <div class="right-st-zone3 rsz field-card card"></div>
+                <div class="right-st-zone1 1 rsz field-card card empty"></div>
+                <div class="right-st-zone2 2 rsz field-card card empty"></div>
+                <div class="right-st-zone3 3 rsz field-card card empty"></div>
             </div>
         </div>
     </div>
     <div id="space"></div>
     <div id="space"></div>
     <div id="hand">
-        <div id="card1" class="card"><img class="fit" src="images/bsGardna.png"></div>
-        <div id="card2" class="card"><img class="fit" src="images/bsGardna.png"></div>
-        <div id="card3" class="card"><img class="fit" src="images/bsGardna.png"></div>
-        <div id="card4" class="card"><img class="fit" src="images/bsGardna.png"></div>
-        <div id="card5" class="card"><img class="fit" src="images/bsGardna.png"></div>
-        <div id="card6" class="card"><img class="fit" src="images/bsGardna.png"></div>
-        <div id="card7" class="card"><img class="fit" src="images/bsGardna.png"></div>
-        <div id ="deck" class="card"><img class="fit" src="images/Card back.png"></div>
+        <div id="card0" class="card hand empty 0"></div>
+        <div id="card1" class="card hand empty 1"></div>
+        <div id="card2" class="card hand empty 2"></div>
+        <div id="card3" class="card hand empty 3"></div>
+        <div id="card4" class="card hand empty 4"></div>
+        <div id="card5" class="card hand empty 5"></div>
+        <div id="card6" class="card hand empty 6"></div>
+        
+        <div id ="deck" class="card"><img class="fit" src="images/cardback.png"></div>
     </div>
 </body>
 </html>

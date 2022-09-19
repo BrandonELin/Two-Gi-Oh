@@ -5,11 +5,18 @@ body{
     align-items: center;
 }
 
+.field-card{
+    width: 16vw;
+    height: 16vw;
+    display: flex;
+    align-content: center;
+    position: relative;
+}
+
 #field{
     display: grid;
     grid-template-columns: 32vw 30vw 32vw;
     height: 48vw;
-    border: 3px solid white;
     width: 94vw;
 }
 #left{
@@ -30,8 +37,9 @@ body{
 
 .card{
     background-color: red;
-    border: 3px solid white;
+    border: .2vw solid white;
 }
+
 
 
 .center{
@@ -39,9 +47,8 @@ body{
     color: red;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
-    font-size: 50px;
 }
 .phases{
     display: flex;
@@ -69,20 +76,31 @@ body{
 .phase{
     border: .5vh solid red;
     border-radius: 50%;
-    height: 10vh;
-    width: 10vh;
+    height: 8vh;
+    width: 8vh;
     text-align: center;
     text-justify: center;
-    font-size: 8.5vh;
+    font-size: 7vh;
 }
 .lp{
     font-size: 12vh;
     text-justify: center;
 }
 
-
+h1{
+    color: white;
+}
 
 .fit{
     width: 100%;
+    height: 100%;
     object-fit: scale-down;
+}
+
+.stats{
+    position: absolute;
+    left:2vw;
+    top: 60%;
+    font-size: 3vw;
+    background-color: white;
 }
